@@ -4,3 +4,15 @@ set -eu
 
 echo "[pre-push] Generating pending release declaration"
 npm run release:declare
+
+declaration_file="releases/pending-release.md"
+
+if [ -n "$(git status --porcelain -- "$declaration_file")" ]; then
+  echo "[pre-push] Detected release declaration changes"
+  git add "$declaration_file"
+
+  if ! git diff --cached --quiet -- "$declaration_file"; then
+    echo "[pre-push] Creating auto-commit for release declaration"
+    ENGRAM_POST_COMMIT_AUTOCOMMIT=1 git commit -m "chore: update release declaration"
+  fi
+fi

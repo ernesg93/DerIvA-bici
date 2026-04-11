@@ -14,4 +14,4 @@ Versioned automation scripts and git hooks.
 
 - `pre-commit` → runs `gga run` (fails if `gga` is missing)
 - `post-commit` → runs `sync:engram:commit` (guarded by `ENGRAM_POST_COMMIT_AUTOCOMMIT=1`)
-- `pre-push` → runs `release:declare` before push
+- `pre-push` → runs `release:declare`; if `releases/pending-release.md` changed, stages and auto-commits it as `chore: update release declaration`

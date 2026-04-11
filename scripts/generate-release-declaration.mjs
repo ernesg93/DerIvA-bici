@@ -49,6 +49,10 @@ function getCommitSubjects(range) {
     .filter(Boolean);
 }
 
+function getHeadCommitDate() {
+  return runGit(["log", "-1", "--pretty=format:%cI"]);
+}
+
 function buildContent({ timestamp, branch, rangeLabel, commits }) {
   const bulletList = commits.length
     ? commits.map((subject) => `- ${subject}`).join("\n")
@@ -73,7 +77,7 @@ async function main() {
   const range = lastTag ? `${lastTag}..HEAD` : null;
   const rangeLabel = range || "all commits (no tags found)";
   const commits = getCommitSubjects(range);
-  const timestamp = new Date().toISOString();
+  const timestamp = getHeadCommitDate() || new Date().toISOString();
   const content = buildContent({ timestamp, branch, rangeLabel, commits });
 
   await mkdir(releasesDir, { recursive: true });
