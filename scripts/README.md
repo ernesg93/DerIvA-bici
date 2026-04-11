@@ -20,7 +20,7 @@ Versioned automation scripts and git hooks.
 ## Release publish behavior
 
 - release version is always `v<package.json.version>`
-- push is blocked if that tag already exists on remote OR the GitHub release already exists
+- if that tag already exists on remote OR the GitHub release already exists, publication is skipped (no failure)
 - if both do not exist:
   - ensures local tag points to `HEAD` (creates it if missing)
   - pushes only that tag first (internal guarded push to avoid hook recursion)

@@ -72,7 +72,7 @@ async function ensureReleaseNotes() {
   }
 }
 
-function assertRemoteTagDoesNotExist(tag) {
+function remoteTagExists(tag) {
   const remoteTag = run("git", [
     "ls-remote",
     "--tags",
@@ -87,20 +87,14 @@ function assertRemoteTagDoesNotExist(tag) {
     );
   }
 
-  if (remoteTag.stdout) {
-    fail(
-      `Tag '${tag}' already exists on remote '${remoteName}'. Bump package.json version before pushing.`,
-    );
-  }
+  return Boolean(remoteTag.stdout);
 }
 
-function assertReleaseDoesNotExist(tag) {
+function githubReleaseExists(tag) {
   const release = run("gh", ["release", "view", tag]);
 
   if (release.ok) {
-    fail(
-      `GitHub release '${tag}' already exists. Bump package.json version before pushing.`,
-    );
+    return true;
   }
 
   const stderr = release.stderr.toLowerCase();
@@ -112,6 +106,8 @@ function assertReleaseDoesNotExist(tag) {
   if (!notFound) {
     fail(`Unable to verify if release '${tag}' exists: ${release.stderr || "unknown error"}`);
   }
+
+  return false;
 }
 
 function ensureLocalTag(tag) {
@@ -194,8 +190,16 @@ async function main() {
   const tag = `v${version}`;
 
   await ensureReleaseNotes();
-  assertRemoteTagDoesNotExist(tag);
-  assertReleaseDoesNotExist(tag);
+  const hasRemoteTag = remoteTagExists(tag);
+  const hasGithubRelease = githubReleaseExists(tag);
+
+  if (hasRemoteTag || hasGithubRelease) {
+    console.log(
+      `[release:publish] Release ${tag} already exists (remote-tag=${hasRemoteTag}, github-release=${hasGithubRelease}). Skipping publication.`,
+    );
+    return;
+  }
+
   ensureLocalTag(tag);
   pushTagToRemote(tag);
   createGithubRelease(tag);

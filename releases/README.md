@@ -23,11 +23,10 @@ The file is overwritten on each run to keep the declaration predictable and non-
 - tag format: `v<package.json.version>`
 - release notes source: `releases/pending-release.md`
 
-Strict guardrails:
+Synchronization guardrails:
 
-- If remote tag `v<version>` already exists, push aborts.
-- If GitHub release `v<version>` already exists, push aborts.
-- In both cases, bump `package.json.version` before pushing again.
+- If remote tag `v<version>` **or** GitHub release `v<version>` already exists, publication is skipped (no failure) and the original branch push continues.
+- If neither exists, release publication runs normally.
 
 Publish sequence when version is new:
 
@@ -36,6 +35,12 @@ Publish sequence when version is new:
 3. Push that tag first (internal push with recursion guard)
 4. Create GitHub release with `gh release create --verify-tag`
 5. Continue with the original branch push
+
+When version is already published:
+
+1. Generate + auto-commit `pending-release.md` (existing behavior)
+2. Detect existing tag/release for `v<package.json.version>`
+3. Log skip message and continue with original branch push
 
 ### Caveat (important)
 
