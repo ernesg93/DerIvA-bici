@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -eu
+
+if ! command -v gga >/dev/null 2>&1; then
+  echo "[pre-commit] Error: 'gga' command not found in PATH." >&2
+  echo "[pre-commit] Install/configure GGA before committing." >&2
+  exit 1
+fi
+
+echo "[pre-commit] Running gga run"
+gga run

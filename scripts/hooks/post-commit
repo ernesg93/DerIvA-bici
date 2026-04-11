@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -eu
+
+# Prevent hook recursion when sync-engram creates an auto-commit.
+if [ "${ENGRAM_POST_COMMIT_AUTOCOMMIT:-0}" = "1" ]; then
+  exit 0
+fi
+
+echo "[post-commit] Running engram sync commit flow"
+npm run sync:engram:commit

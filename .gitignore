@@ -31,7 +31,7 @@ coverage/
 .vscode/
 
 # AI / local memory artifacts
-.engram/
+.atl/
 
 # Misc
 tmp/

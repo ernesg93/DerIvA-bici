@@ -1,0 +1,1 @@
+export { ventabiciLandingDefinition } from "./landing";
