@@ -11,7 +11,8 @@
     "sync:engram": "node scripts/sync-engram.mjs",
     "sync:engram:stage": "node scripts/sync-engram.mjs --stage",
     "sync:engram:commit": "node scripts/sync-engram.mjs --commit",
-    "release:declare": "node scripts/generate-release-declaration.mjs"
+    "release:declare": "node scripts/generate-release-declaration.mjs",
+    "release:publish": "node scripts/publish-release.mjs"
   },
   "dependencies": {
     "next": "15.2.0",

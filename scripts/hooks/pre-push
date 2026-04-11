@@ -2,6 +2,11 @@
 
 set -eu
 
+if [ "${UNIFICADORA_INTERNAL_TAG_PUSH:-0}" = "1" ]; then
+  echo "[pre-push] Internal tag push detected, skipping release automation"
+  exit 0
+fi
+
 echo "[pre-push] Generating pending release declaration"
 npm run release:declare
 
@@ -16,3 +21,6 @@ if [ -n "$(git status --porcelain -- "$declaration_file")" ]; then
     ENGRAM_POST_COMMIT_AUTOCOMMIT=1 git commit -m "chore: update release declaration"
   fi
 fi
+
+echo "[pre-push] Publishing GitHub release from package.json version"
+npm run release:publish -- "$@"

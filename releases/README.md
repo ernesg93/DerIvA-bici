@@ -14,3 +14,29 @@ It includes:
 - bullet list of commit subjects
 
 The file is overwritten on each run to keep the declaration predictable and non-destructive.
+
+## Publication on push
+
+`pre-push` now also runs `npm run release:publish -- <remote> <url>` and uses:
+
+- `package.json.version` as source of truth
+- tag format: `v<package.json.version>`
+- release notes source: `releases/pending-release.md`
+
+Strict guardrails:
+
+- If remote tag `v<version>` already exists, push aborts.
+- If GitHub release `v<version>` already exists, push aborts.
+- In both cases, bump `package.json.version` before pushing again.
+
+Publish sequence when version is new:
+
+1. Generate + auto-commit `pending-release.md` (existing behavior)
+2. Ensure local tag exists and points to `HEAD` (or fail)
+3. Push that tag first (internal push with recursion guard)
+4. Create GitHub release with `gh release create --verify-tag`
+5. Continue with the original branch push
+
+### Caveat (important)
+
+Because tag push + release creation happen inside `pre-push` before the original branch push finishes, a later failure in the branch push can leave a published release/tag while branch refs were not updated. This is intentional for deterministic release publication from hooks.
