@@ -33,10 +33,10 @@ function getLastTag() {
   return runGit(["describe", "--tags", "--abbrev=0"]);
 }
 
-function getCommitSubjects(range) {
+function getCommits(range) {
   const args = range
-    ? ["log", range, "--pretty=format:%s"]
-    : ["log", "--pretty=format:%s"];
+    ? ["log", range, "--pretty=format:%H%x1f%cI%x1f%s"]
+    : ["log", "--pretty=format:%H%x1f%cI%x1f%s"];
 
   const output = runGit(args);
   if (!output) {
@@ -46,22 +46,25 @@ function getCommitSubjects(range) {
   return output
     .split("\n")
     .map((line) => line.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .map((line) => {
+      const [hash, committedAt, subject] = line.split("\x1f");
+      return { hash, committedAt, subject };
+    })
+    .filter((commit) => commit.hash && commit.committedAt && commit.subject);
 }
 
-function getHeadCommitDate() {
-  return runGit(["log", "-1", "--pretty=format:%cI"]);
-}
+const IGNORED_SUBJECTS = new Set(["chore: update release declaration"]);
 
-function buildContent({ timestamp, branch, rangeLabel, commits }) {
+function buildContent({ snapshotFrom, branch, rangeLabel, commits }) {
   const bulletList = commits.length
-    ? commits.map((subject) => `- ${subject}`).join("\n")
-    : "- No commits found in selected range";
+    ? commits.map((commit) => `- ${commit.subject}`).join("\n")
+    : "- No release-relevant commits found in selected range";
 
   return [
     "# Pending Release Declaration",
     "",
-    `Generated at: ${timestamp}`,
+    `Snapshot from: ${snapshotFrom}`,
     `Branch: ${branch}`,
     `Commit range: ${rangeLabel}`,
     "",
@@ -76,9 +79,11 @@ async function main() {
   const lastTag = getLastTag();
   const range = lastTag ? `${lastTag}..HEAD` : null;
   const rangeLabel = range || "all commits (no tags found)";
-  const commits = getCommitSubjects(range);
-  const timestamp = getHeadCommitDate() || new Date().toISOString();
-  const content = buildContent({ timestamp, branch, rangeLabel, commits });
+  const commits = getCommits(range).filter(
+    (commit) => !IGNORED_SUBJECTS.has(commit.subject),
+  );
+  const snapshotFrom = commits[0]?.committedAt || rangeLabel;
+  const content = buildContent({ snapshotFrom, branch, rangeLabel, commits });
 
   await mkdir(releasesDir, { recursive: true });
   await writeFile(outputFile, content, "utf8");

@@ -8,12 +8,13 @@ When `pre-push` detects changes in this file, it stages and auto-commits it with
 
 It includes:
 
-- deterministic snapshot timestamp (HEAD commit date when available)
+- deterministic snapshot marker from the latest release-relevant commit date
 - current branch name
 - commit range (`<last-tag>..HEAD` or all commits when no tags exist)
-- bullet list of commit subjects
+- bullet list of commit subjects (excluding `chore: update release declaration`)
 
 The file is overwritten on each run to keep the declaration predictable and non-destructive.
+Because auto-generated declaration commits are excluded from both the subject list and snapshot marker, repeated pushes do not create a new declaration diff unless actual release-relevant commits changed.
 
 ## Publication on push
 

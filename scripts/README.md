@@ -17,6 +17,8 @@ Versioned automation scripts and git hooks.
 - `post-commit` → runs `sync:engram:commit` (guarded by `ENGRAM_POST_COMMIT_AUTOCOMMIT=1`)
 - `pre-push` → runs `release:declare`; if `releases/pending-release.md` changed, stages and auto-commits it as `chore: update release declaration`; then runs `release:publish`
 
+`release:declare` intentionally excludes `chore: update release declaration` commits from generated notes and derives the snapshot marker from the latest release-relevant commit date, so repeated pushes stay stable when no real release content changed.
+
 ## Release publish behavior
 
 - release version is always `v<package.json.version>`
