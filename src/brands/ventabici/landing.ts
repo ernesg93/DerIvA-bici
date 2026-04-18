@@ -7,12 +7,12 @@ export const ventabiciLandingDefinition: LandingDefinition = {
   seo: {
     title: "Ventabici",
     description: "Landing inicial para Ventabici en la plataforma unificada.",
-    openGraphImage: "/hero-frames/ventabici/cover.jpg"
+    openGraphImage: "/hero-frames/ventabici/cover.svg"
   },
   hero: {
     kind: "image",
     image: {
-      src: "/hero-frames/ventabici/cover.jpg"
+      src: "/hero-frames/ventabici/cover.svg"
     }
   }
 };

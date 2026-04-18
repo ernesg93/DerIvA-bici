@@ -2,6 +2,34 @@ export type HeroSequenceManifest = {
   src: string;
 };
 
+export type HeroOverlayPosition = "top" | "center" | "bottom";
+
+export type HeroOverlayTone = "primary" | "secondary";
+
+export type HeroOverlayCta = {
+  label: string;
+  href: string;
+  variant?: "primary" | "secondary";
+};
+
+export type HeroNarrativeOverlay = {
+  id: string;
+  start: number;
+  end: number;
+  position: HeroOverlayPosition;
+  heading?: string;
+  body?: string;
+  accent?: string;
+  accentTone?: HeroOverlayTone;
+  ctas?: HeroOverlayCta[];
+};
+
+export type HeroSequenceNarrative = {
+  ariaLabel?: string;
+  overlays: HeroNarrativeOverlay[];
+  showScrollHint?: boolean;
+};
+
 export type HeroFallback = {
   posterSrc: string;
   staticImageSrc?: string;
@@ -22,6 +50,8 @@ export type HeroSequenceConfig = {
   fallback: HeroFallback;
   degradation: HeroDegradationStrategy;
   posterFrame?: number;
+  viewportScrollHeightVh?: number;
+  narrative?: HeroSequenceNarrative;
 };
 
 export type HeroContent =
