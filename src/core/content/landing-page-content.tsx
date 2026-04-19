@@ -1,9 +1,93 @@
-import type { LandingDefinition } from "@/src/core/content/contracts/landing-definition";
+import type {
+  LandingCtaGroup,
+  LandingDefinition
+} from "@/src/core/content/contracts/landing-definition";
 import { HeroRenderer } from "@/src/core/hero/hero-renderer";
 
 type LandingPageContentProps = {
   landing?: LandingDefinition;
 };
+
+function LandingCtaLinks({
+  ctaGroup,
+  groupClassName
+}: {
+  ctaGroup: LandingCtaGroup;
+  groupClassName?: string;
+}) {
+  return (
+    <div className={groupClassName ?? "landing-cta-group"}>
+      {ctaGroup.ctas.map((cta) => (
+        <a
+          key={`${cta.href}-${cta.label}`}
+          href={cta.href}
+          className={`landing-cta landing-cta--${cta.variant ?? "primary"}`}
+          target={cta.openInNewTab ? "_blank" : undefined}
+          rel={cta.openInNewTab ? "noopener noreferrer" : undefined}
+        >
+          {cta.label}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function LandingSections({ sections }: { sections: NonNullable<LandingDefinition["sections"]> }) {
+  return (
+    <div className="landing-sections">
+      {sections.map((section) => {
+        if (section.kind === "trust") {
+          return (
+            <section key={section.id} className="landing-section" aria-label={section.title}>
+              <h2>{section.title}</h2>
+              {section.description ? <p className="description">{section.description}</p> : null}
+              <ul className="landing-trust-list">
+                {section.items.map((item) => (
+                  <li key={item.title}>
+                    <h3>{item.title}</h3>
+                    {item.detail ? <p>{item.detail}</p> : null}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        }
+
+        if (section.kind === "faq") {
+          return (
+            <section key={section.id} className="landing-section" aria-label={section.title}>
+              <h2>{section.title}</h2>
+              {section.description ? <p className="description">{section.description}</p> : null}
+              <div className="landing-faq-list">
+                {section.items.map((item) => (
+                  <details key={item.question}>
+                    <summary>{item.question}</summary>
+                    <p>{item.answer}</p>
+                  </details>
+                ))}
+              </div>
+            </section>
+          );
+        }
+
+        return (
+          <section key={section.id} className="landing-section" aria-label={section.title}>
+            <h2>{section.title}</h2>
+            {section.description ? <p className="description">{section.description}</p> : null}
+            {section.items?.length ? (
+              <ul className="landing-content-list">
+                {section.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            ) : null}
+            {section.ctaGroup ? <LandingCtaLinks ctaGroup={section.ctaGroup} /> : null}
+          </section>
+        );
+      })}
+    </div>
+  );
+}
 
 export function LandingPageContent({ landing }: LandingPageContentProps) {
   if (!landing) {
@@ -27,6 +111,37 @@ export function LandingPageContent({ landing }: LandingPageContentProps) {
         <p className="eyebrow">Brand: {landing.brandId}</p>
         <h1>{landing.headline}</h1>
         <p className="description">{landing.subheadline}</p>
+
+        {landing.offer ? (
+          <section className="landing-offer" aria-label="Value proposition">
+            {landing.offer.eyebrow ? (
+              <p className="eyebrow">{landing.offer.eyebrow}</p>
+            ) : null}
+            <h2>{landing.offer.title}</h2>
+            <p className="description">{landing.offer.description}</p>
+            {landing.offer.highlights?.length ? (
+              <ul className="landing-offer-highlights">
+                {landing.offer.highlights.map((highlight) => (
+                  <li key={highlight}>{highlight}</li>
+                ))}
+              </ul>
+            ) : null}
+            {landing.offer.ctaGroup ? (
+              <LandingCtaLinks ctaGroup={landing.offer.ctaGroup} />
+            ) : null}
+          </section>
+        ) : null}
+
+        {landing.ctaGroups?.length
+          ? landing.ctaGroups.map((ctaGroup) => (
+              <section key={ctaGroup.id ?? ctaGroup.label ?? "general-cta"}>
+                {ctaGroup.label ? <h2>{ctaGroup.label}</h2> : null}
+                <LandingCtaLinks ctaGroup={ctaGroup} />
+              </section>
+            ))
+          : null}
+
+        {landing.sections?.length ? <LandingSections sections={landing.sections} /> : null}
       </section>
     </main>
   );
