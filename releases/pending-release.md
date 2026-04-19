@@ -1,10 +1,11 @@
 # Pending Release Declaration
 
-Snapshot from: 2026-04-18T22:52:15-04:00
+Snapshot from: 2026-04-18T23:03:09-04:00
 Branch: master
 Commit range: v0.1.0..HEAD
 
 ## Commit Subjects
+- feat: add commercial proof sections for ventabici
 - feat: add commercial landing contracts for ventabici
 - feat: migrate nebula hero sequence assets
 - feat: port nebula sequence hero into core
