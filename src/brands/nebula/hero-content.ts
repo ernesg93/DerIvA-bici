@@ -2,6 +2,8 @@ import type { HeroSequenceNarrative } from "@/src/core/hero/types";
 
 export const nebulaHeroNarrative: HeroSequenceNarrative = {
   ariaLabel: "Experiencia visual scrollytelling de Nebula Commerce",
+  loaderLabel: "Cargando experiencia visual de Nebula Commerce",
+  scrollHintLabel: "Scroll",
   showScrollHint: true,
   overlays: [
     {

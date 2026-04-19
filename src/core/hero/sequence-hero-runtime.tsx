@@ -41,7 +41,18 @@ function joinPath(basePath: string, relativePath: string): string {
 
 function applyIndexPattern(pattern: string, index: number): string {
   const oneBasedIndex = index + 1;
-  return pattern.replace(/\{index(?::(\d+))?\}/g, (_match, padDigits) => {
+  const withZeroBasedIndex = pattern.replace(
+    /\{index0(?::(\d+))?\}/g,
+    (_match, padDigits) => {
+      if (!padDigits) {
+        return String(index);
+      }
+
+      return String(index).padStart(Number(padDigits), "0");
+    }
+  );
+
+  return withZeroBasedIndex.replace(/\{index(?::(\d+))?\}/g, (_match, padDigits) => {
     if (!padDigits) {
       return String(oneBasedIndex);
     }
@@ -366,27 +377,33 @@ export function SequenceHeroRuntime({ config }: SequenceHeroRuntimeProps) {
 
   if (fallbackMode) {
     return (
-      <section className="hero-fallback-shell" aria-label="Hero fallback image">
-        <img src={fallbackImageSource} alt="Hero fallback" className="hero-fallback-image" />
+      <section className="hero-fallback-shell" aria-label={config.fallback.ariaLabel}>
+        <img
+          src={fallbackImageSource}
+          alt={config.fallback.imageAlt ?? ""}
+          className="hero-fallback-image"
+        />
       </section>
     );
   }
 
   const overlays = config.narrative?.overlays ?? [];
+  const loaderLabel = config.narrative?.loaderLabel;
   const showScrollHint = config.narrative?.showScrollHint ?? true;
+  const scrollHintLabel = config.narrative?.scrollHintLabel;
 
   return (
     <section
       ref={containerRef}
       className="sequence-hero-container"
       style={{ height: `${config.viewportScrollHeightVh ?? 360}vh` }}
-      aria-label={
-        config.narrative?.ariaLabel ?? "Experiencia visual scrollytelling"
-      }
+      aria-label={config.narrative?.ariaLabel}
     >
       {isLoading ? (
         <div className="sequence-hero-loader" role="status" aria-live="polite">
-          <div className="sequence-hero-loader-title">Cargando experiencia visual</div>
+          {loaderLabel ? (
+            <div className="sequence-hero-loader-title">{loaderLabel}</div>
+          ) : null}
           <div className="sequence-hero-loader-bar">
             <span style={{ width: `${Math.round(loadProgress * 100)}%` }} />
           </div>
@@ -446,9 +463,9 @@ export function SequenceHeroRuntime({ config }: SequenceHeroRuntimeProps) {
           );
         })}
 
-        {showScrollHint && scrollProgress < 0.05 && !isLoading ? (
+        {showScrollHint && scrollHintLabel && scrollProgress < 0.05 && !isLoading ? (
           <div className="sequence-hero-scroll-hint" aria-hidden="true">
-            <span>Scroll</span>
+            <span>{scrollHintLabel}</span>
             <svg viewBox="0 0 16 24" fill="none">
               <path
                 d="M8 4v12m0 0l-4-4m4 4l4-4"

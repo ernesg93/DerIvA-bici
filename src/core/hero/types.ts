@@ -26,6 +26,8 @@ export type HeroNarrativeOverlay = {
 
 export type HeroSequenceNarrative = {
   ariaLabel?: string;
+  loaderLabel?: string;
+  scrollHintLabel?: string;
   overlays: HeroNarrativeOverlay[];
   showScrollHint?: boolean;
 };
@@ -33,6 +35,8 @@ export type HeroSequenceNarrative = {
 export type HeroFallback = {
   posterSrc: string;
   staticImageSrc?: string;
+  ariaLabel?: string;
+  imageAlt?: string;
 };
 
 export type HeroDegradationStrategy = {
