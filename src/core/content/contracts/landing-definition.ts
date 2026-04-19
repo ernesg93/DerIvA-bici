@@ -50,10 +50,32 @@ export type LandingFaqSection = LandingSectionBase & {
   }>;
 };
 
+export type LandingFeatureGridSection = LandingSectionBase & {
+  kind: "feature-grid";
+  items: Array<{
+    title: string;
+    description: string;
+    badge?: string;
+  }>;
+};
+
+export type LandingSocialProofSection = LandingSectionBase & {
+  kind: "social-proof";
+  items: Array<{
+    quote: string;
+    author: string;
+    role?: string;
+    location?: string;
+    outcome?: string;
+  }>;
+};
+
 export type LandingSection =
   | LandingContentSection
   | LandingTrustSection
-  | LandingFaqSection;
+  | LandingFaqSection
+  | LandingFeatureGridSection
+  | LandingSocialProofSection;
 
 export type LandingDefinition = {
   brandId: string;

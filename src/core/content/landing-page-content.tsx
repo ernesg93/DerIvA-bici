@@ -70,6 +70,47 @@ function LandingSections({ sections }: { sections: NonNullable<LandingDefinition
           );
         }
 
+        if (section.kind === "feature-grid") {
+          return (
+            <section key={section.id} className="landing-section" aria-label={section.title}>
+              <h2>{section.title}</h2>
+              {section.description ? <p className="description">{section.description}</p> : null}
+              <ul className="landing-feature-grid">
+                {section.items.map((item) => (
+                  <li key={item.title}>
+                    {item.badge ? <p className="eyebrow">{item.badge}</p> : null}
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        }
+
+        if (section.kind === "social-proof") {
+          return (
+            <section key={section.id} className="landing-section" aria-label={section.title}>
+              <h2>{section.title}</h2>
+              {section.description ? <p className="description">{section.description}</p> : null}
+              <ul className="landing-social-proof">
+                {section.items.map((item) => (
+                  <li key={`${item.author}-${item.quote}`}>
+                    <blockquote>“{item.quote}”</blockquote>
+                    <p className="landing-social-proof-author">{item.author}</p>
+                    {item.role || item.location ? (
+                      <p className="landing-social-proof-meta">
+                        {[item.role, item.location].filter(Boolean).join(" · ")}
+                      </p>
+                    ) : null}
+                    {item.outcome ? <p className="landing-social-proof-outcome">{item.outcome}</p> : null}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        }
+
         return (
           <section key={section.id} className="landing-section" aria-label={section.title}>
             <h2>{section.title}</h2>

@@ -127,6 +127,58 @@ body {
   color: #d1d5db;
 }
 
+.landing-feature-grid,
+.landing-social-proof {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.landing-feature-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.landing-feature-grid li,
+.landing-social-proof li {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.8rem;
+  background: rgba(15, 23, 42, 0.45);
+  padding: 0.9rem;
+}
+
+.landing-feature-grid h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.landing-feature-grid p {
+  margin: 0.35rem 0 0;
+  color: #d1d5db;
+}
+
+.landing-social-proof blockquote {
+  margin: 0;
+  color: #f3f4f6;
+}
+
+.landing-social-proof-author {
+  margin: 0.75rem 0 0;
+  font-weight: 700;
+}
+
+.landing-social-proof-meta,
+.landing-social-proof-outcome {
+  margin: 0.25rem 0 0;
+  color: #d1d5db;
+  font-size: 0.92rem;
+}
+
+.landing-social-proof-outcome {
+  color: #bfdbfe;
+}
+
 .hero-image-shell,
 .hero-fallback-shell {
   position: relative;
