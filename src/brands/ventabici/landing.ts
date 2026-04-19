@@ -90,6 +90,34 @@ export const ventabiciLandingDefinition: LandingDefinition = {
       ]
     },
     {
+      id: "senales-comerciales",
+      kind: "metrics",
+      title: "Señales comerciales que importan",
+      description: "Indicadores operativos usados para validar performance comercial semana a semana.",
+      items: [
+        {
+          label: "Tiempo de respuesta",
+          value: "< 15 min",
+          detail: "Promedio en horario comercial para consultas entrantes calificadas."
+        },
+        {
+          label: "Consultas calificadas",
+          value: "71%",
+          detail: "Porcentaje de contactos con intención real y presupuesto alineado."
+        },
+        {
+          label: "Tiempo promedio de cierre",
+          value: "7 días",
+          detail: "Desde publicación activa hasta reserva confirmada."
+        },
+        {
+          label: "Alcance",
+          value: "+42k",
+          detail: "Usuarios únicos impactados por mes en audiencias ciclistas segmentadas."
+        }
+      ]
+    },
+    {
       id: "publicacion-pro",
       kind: "feature-grid",
       title: "Qué incluye una publicación comercial completa",

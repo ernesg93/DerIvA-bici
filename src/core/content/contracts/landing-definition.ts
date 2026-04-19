@@ -70,12 +70,22 @@ export type LandingSocialProofSection = LandingSectionBase & {
   }>;
 };
 
+export type LandingMetricsSection = LandingSectionBase & {
+  kind: "metrics";
+  items: Array<{
+    label: string;
+    value: string;
+    detail?: string;
+  }>;
+};
+
 export type LandingSection =
   | LandingContentSection
   | LandingTrustSection
   | LandingFaqSection
   | LandingFeatureGridSection
-  | LandingSocialProofSection;
+  | LandingSocialProofSection
+  | LandingMetricsSection;
 
 export type LandingDefinition = {
   brandId: string;

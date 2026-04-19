@@ -111,6 +111,24 @@ function LandingSections({ sections }: { sections: NonNullable<LandingDefinition
           );
         }
 
+        if (section.kind === "metrics") {
+          return (
+            <section key={section.id} className="landing-section" aria-label={section.title}>
+              <h2>{section.title}</h2>
+              {section.description ? <p className="description">{section.description}</p> : null}
+              <ul className="landing-metrics-grid">
+                {section.items.map((item) => (
+                  <li key={item.label}>
+                    <p className="landing-metric-value">{item.value}</p>
+                    <p className="landing-metric-label">{item.label}</p>
+                    {item.detail ? <p className="landing-metric-detail">{item.detail}</p> : null}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          );
+        }
+
         return (
           <section key={section.id} className="landing-section" aria-label={section.title}>
             <h2>{section.title}</h2>
@@ -132,12 +150,7 @@ function LandingSections({ sections }: { sections: NonNullable<LandingDefinition
 
 export function LandingPageContent({ landing }: LandingPageContentProps) {
   if (!landing) {
-    return (
-      <main className="page">
-        <h1>Unificadora</h1>
-        <p>No hay marcas registradas todavía.</p>
-      </main>
-    );
+    return <main className="page" />;
   }
 
   return (
@@ -148,13 +161,12 @@ export function LandingPageContent({ landing }: LandingPageContentProps) {
         subheadline={landing.subheadline}
       />
 
-      <section className="landing-copy" aria-label="Landing summary">
-        <p className="eyebrow">Brand: {landing.brandId}</p>
+      <section className="landing-copy">
         <h1>{landing.headline}</h1>
         <p className="description">{landing.subheadline}</p>
 
         {landing.offer ? (
-          <section className="landing-offer" aria-label="Value proposition">
+          <section className="landing-offer">
             {landing.offer.eyebrow ? (
               <p className="eyebrow">{landing.offer.eyebrow}</p>
             ) : null}
