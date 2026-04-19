@@ -1,10 +1,11 @@
 # Pending Release Declaration
 
-Snapshot from: 2026-04-18T23:47:01-04:00
+Snapshot from: 2026-04-18T23:55:36-04:00
 Branch: master
 Commit range: v0.1.0..HEAD
 
 ## Commit Subjects
+- chore: add npm lockfile
 - feat: add commercial metrics section for ventabici
 - feat: add commercial proof sections for ventabici
 - feat: add commercial landing contracts for ventabici
